@@ -19,10 +19,20 @@ contract DecentralizedGlobalBillboard {
         address owner;
     }
 
+//saved as domain name in mapping
+    struct BillboardShower {
+        //string domainName;
+        string selectedURLs;
+        string isBanned;
+        uint rewardCoefficient;
+    }
+
 mapping( uint => Advertisement) public advertisements; //time to ad
 
 
-    
+
+    //erc20 yap
+
 
     //sahip olduğu adleri göstererek yapılabilir
     function changeAdURI( uint time, string calldata _imageURI ) external {
@@ -86,10 +96,6 @@ mapping( uint => Advertisement) public advertisements; //time to ad
          return 2 days;
     }
 
-    
-
-    
-
     function buyAd( uint time, string calldata _imageURI ) external payable {
         time = time / AD_DURATION * AD_DURATION;
         Advertisement memory ad = advertisements[time];
@@ -108,6 +114,24 @@ mapping( uint => Advertisement) public advertisements; //time to ad
         adStorage.bidTime = now;
         adStorage.owner = msg.sender;
     }
+
+//reward distrubiton
+//%80 billboard showers, %20 burn(so token holders earn)
+
+//billboard (ad) showers
+    //reward coefficent increases hourly to prevent overflowing all coefficents sum and prevent rewarding token to misapplication of billboard
+
+
+    //ingilizceye çevir
+    //ipfs api .com'la mı bitiyor diye kontrol edecek ve urlden sonraki kısma bakacak mesela *'sa ona göre değilse ona göre javascript kontrol edecek girilen parametreye göre
+
+    //web traffic api'ı farklı kod olacak ve DAO karar verecek
+
+    function reportBillBoardShower( string calldata _domainName, string calldata _reportURL ) external {
+
+    }
+
+
 
     
 
