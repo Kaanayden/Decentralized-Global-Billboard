@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { add as dateAdd} from 'date-fns';
 import './App.css';
 import BasicDatePicker from './BasicDatePicker/BasicDatePicker';
 import BasicTimePicker from './BasicTimePicker/BasicTimePicker';
+import TimeLine from './TimeLine/TimeLine';
 import MainHeader from './images/main-header.jpg';
 
 function convertToUTC( date ) {
@@ -16,6 +17,7 @@ const App = ()=>{
     const [chosenDate, setNewDate] = useState(new Date())
     const [chosenTime, setNewTime] = useState(new Date())
     const [isChosen, setChosen] = useState(false)
+   // const chosenHourRef = useRef();
 
     const handleClickDate = (chosenDate)=>{
         setNewDate(chosenDate)
@@ -30,6 +32,7 @@ const App = ()=>{
         setNewDate(new Date())
         setChosen(true)
     }
+    
     return(
         <div>
             <div className='dater'>
@@ -38,7 +41,10 @@ const App = ()=>{
                 <BasicTimePicker className="time-picker" handleClickTime = {handleClickTime}/>
                 <button className="now-button" onClick={handleClickNowButton}>Now</button>
                 {isChosen && <div>{chosenDate.toUTCString()}</div>}
-            </div>          
+            </div>
+            <div>
+                {isChosen && <TimeLine chosenHour={chosenDate.getUTCHours()}/>}    
+            </div>        
         </div>
     )
   }
