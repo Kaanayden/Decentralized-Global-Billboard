@@ -14,7 +14,10 @@
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-render-if-visible": "^2.1.0",
     "react-scripts": "5.0.1",
+    "react-virtualized": "^9.22.3",
+    "react-visibility-sensor": "^5.1.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

@@ -1,40 +1,48 @@
-import React, {useRef, useEffect, useState} from "react";
+import React, {useRef, useEffect, useState, Suspense} from "react";
 import AddGrid from "../AddGrid/AddGrid";
-import Carousel from '../Carousel/Carousel';
+import { subMinutes, isBefore } from 'date-fns';
+import VisibilitySensor from 'react-visibility-sensor';
 import './TimeLine.css';
 
 
 export default function TimeLine(props){
     const {chosenDate, changeChosenDate} = props
+    const cards = []
     const chosenRef = useRef()
-    const [buttons, setButtons] = useState(createButtons(20));
-    const index = 1;
+    const [counter, setCounter] = useState(0)
+    const index = 8;
 
-    
-    function createButtons(n){
-        const button = []
-        for(var i = 0; i < n; i++){
-            button.push(<li className="add-grid"><AddGrid chosenDate={chosenDate}/></li>)
-        }
-        //setButtons(buttons);
-        return button;
+    const start = new Date(subMinutes(chosenDate,chosenDate.getHours()*60+chosenDate.getMinutes()))
+    const end = new Date(subMinutes(start,-60*24))
+    for(let i = start; isBefore(i,end); i=subMinutes(i,-1)){
+                /*if(i === chosenDate){
+                    cards.push(<VisibilitySensor>
+                                    {({isVisible}) =>
+                                        <div ref={useRef} className="card"><AddGrid chosenDate={i}/></div>
+                                    }
+                                </VisibilitySensor>)
+                    }
+                else cards.push(<VisibilitySensor>
+                                    {({isVisible}) =>
+                                    <div className="card"><AddGrid chosenDate={i}/></div>
+                                     }
+                                </VisibilitySensor>)
+                */
+        cards.push(i);
+
     }
-    useEffect(()=>{
-        setButtons(buttons)
-        console.log("deniyoz")
-    },[chosenDate])
-
-
     return(
-        <div>
-            <Carousel
-                show = {10}
-                chosenDate = {chosenDate}
-                changeChosenDate = {changeChosenDate}
-                index = {index}
-            >
-                {buttons}
-            </Carousel>
+        <div className="cards">{
+            cards.map((date)=>{
+                return(
+                    <VisibilitySensor>
+                    {({isVisible}) =>
+                        <div className="cards-item"><AddGrid chosenDate={date}/></div>
+                    }
+                    </VisibilitySensor>
+                )
+            })
+        }
         </div>
     )
 }

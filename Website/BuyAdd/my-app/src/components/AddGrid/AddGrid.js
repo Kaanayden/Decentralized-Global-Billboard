@@ -1,10 +1,11 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import ButtonBase from '@mui/material/ButtonBase';
 import MainHeader from '../images/main-header.jpg';
+
 
 const Img = styled('img')({
   margin: 'auto',
@@ -14,12 +15,13 @@ const Img = styled('img')({
 });
 
 export default function AddGrid({chosenDate}) {
+  
   return (
     <Paper
       sx={{
         p: 2,
         margin: 'auto',
-        maxWidth: 200,
+        maxWidth: 500,
         flexGrow: 1,
         backgroundColor: (theme) =>
           theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -38,10 +40,13 @@ export default function AddGrid({chosenDate}) {
                 Standard license
               </Typography>
               <Typography variant="body2" gutterBottom>
-                sa
+                {chosenDate.toDateString()}
+              </Typography>
+              <Typography variant="body2" gutterBottom>
+                {chosenDate.getHours()<10?"0"+chosenDate.getHours():chosenDate.getHours()}:{chosenDate.getMinutes()<10?"0"+chosenDate.getMinutes():chosenDate.getMinutes()}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                ID: 1030114
+                ID: 10123
               </Typography>
             </Grid>
             <Grid item>
@@ -57,6 +62,6 @@ export default function AddGrid({chosenDate}) {
           </Grid>
         </Grid>
       </Grid>
-    </Paper>
+    </Paper>  
   );
 }
