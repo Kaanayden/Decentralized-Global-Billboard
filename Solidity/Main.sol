@@ -1,15 +1,38 @@
 // SPDX-License-Identifier: MIT
 
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
+
+
 pragma solidity ^0.8.0;
-contract DecentralizedGlobalBillboard {
+contract DecentralizedGlobalBillboard is ERC20, ERC20Burnable, ERC20Permit {
 
-    uint public constant LAST_URI_CHANGE_TIME = 2 minutes;
-    uint public constant LAST_BID_TIME = 10 minutes;
-    uint public constant BID_START_TIME = 2 days;
-    uint public constant DEFAULT_PRICE = 0.01 ether;
-    uint public constant AD_DURATION = 1 minutes;
+//10 million tokens initial
+    constructor() ERC20("Billboard", "BBRD") ERC20Permit("Billboard") {
+        _mint(msg.sender, 10000000 * 10 ** decimals());
+    } 
 
-    uint public totalRevenue;
+    uint constant LAST_URI_CHANGE_TIME = 2 minutes;
+    uint constant LAST_BID_TIME = 10 minutes;
+    uint constant BID_START_TIME = 2 days;
+    uint constant DEFAULT_PRICE = 0.01 ether;
+    uint constant AD_DURATION = 1 minutes;
+    uint constant BURN_RATE = 20;
+
+    
+
+//Billboard showers
+    uint constant COEFFICENT_INCREASE_PERIOD = 1 hours;
+    //uint constant COEFFICENT_INCREASE_START_DURATION = 24 hours; //to give time to reporters
+    //uint constant MINUS_PER_SHOWER = COEFFICENT_INCREASE_START_DURATION / COEFFICENT_INCREASE_PERIOD;
+    //uint public billboardShowerNumber;
+    string[] public billboardShowersDomainNames;
+    uint public totalCoefficient;
+    uint public billboardShowerPool;
+
+    mapping( string => BillboardShower ) public billboardShowers;
 
     struct Advertisement {
         string imageURI;
@@ -22,16 +45,26 @@ contract DecentralizedGlobalBillboard {
 //saved as domain name in mapping
     struct BillboardShower {
         //string domainName;
-        string selectedURLs;
-        string isBanned;
+        bool isActive;
+        bool isBanned;
         uint rewardCoefficient;
+        uint startTime;
+        address ownerAddress;
     }
 
-mapping( uint => Advertisement) public advertisements; //time to ad
-
+    mapping( uint => Advertisement) public advertisements; //time to ad
+    uint public totalRevenue;
 
 
     //erc20 yap
+
+    distributeRevenue( uint value ) {
+        uint tokenToBurn = value * BURN_RATE / 100;
+        _burn( address(this), tokenToBurn );
+        uint remaingTokens = value - tokenToBurn;
+        totalRevenue += remaingTokens;
+        billboardShowerPool += remaingTokens;
+    }
 
 
     //sahip olduğu adleri göstererek yapılabilir
@@ -96,38 +129,72 @@ mapping( uint => Advertisement) public advertisements; //time to ad
          return 2 days;
     }
 
-    function buyAd( uint time, string calldata _imageURI ) external payable {
+    function buyAd( uint time, string calldata _imageURI ) external {
         time = time / AD_DURATION * AD_DURATION;
         Advertisement memory ad = advertisements[time];
         require( ad.owner == address(0), 'already bought' );
-        uint msgValue = msg.value;
-        require( msgValue > getCurrentPrice( time ), 'value is not enough' );
+        address msgSender = msg.sender;
+        uint price = getCurrentPrice( time );
+        require( balanceOf( msgSender ) >= price, 'balance is not enough' );
         uint now = block.timestamp;
         require( now + LAST_BID_TIME < time, 'bid time has expired' );
         require( now > time - BID_START_TIME, 'bid time has not started' );
 
-        totalRevenue += msgValue;
+        _transfer( msgSender, address(this), price );
         Advertisement storage adStorage = advertisements[time];
         adStorage.imageURI = _imageURI;
         adStorage.startPrice = getStartPrice( time );
-        adStorage.bidAmount = msgValue;
+        adStorage.bidAmount = price;
         adStorage.bidTime = now;
-        adStorage.owner = msg.sender;
+        adStorage.owner = msgSender;
+        distributeRevenue( price );
     }
 
 //reward distrubiton
-//%80 billboard showers, %20 burn(so token holders earn)
+//%80 billboard showers, %20 burn(so token holders earn), birazıyla da link ödemeli aslında
 
 //billboard (ad) showers
     //reward coefficent increases hourly to prevent overflowing all coefficents sum and prevent rewarding token to misapplication of billboard
 
 
+    //bunda chainlink gerek yok(varmış reward coefficent hesaplanması lazım)
+    //deposit yatırsa iyi olabilir aslında sahteyi önlemek için ve belki bi kez kontrolden geçse iyi olabiir ?
+    function beBillboardShower(
+        string calldata _domainName,
+        uint _rewardCoefficient ) external {
+                BillboardShower memory billboardShower = billboardShowers[ _domainName ];
+                BillboardShower storage store = billboardShowers[ _domainName ];
+                require( billboardShower.isActive == false, 'already became' );
+                require( billboardShower.isBanned == false, 'banned domain' );
+                store.startTime = block.timestamp;
+                store.ownerAddress = msg.sender;
+
+        afterBeAPIRequest( _domainName, _rewardCoefficient );
+    }
+
+
+
+    function afterBeAPIRequest( string calldata _domainName, uint _rewardCoefficient ) public {
+
+        billboardShowers[ _domainName ].isActive = true;
+        billboardShowers[ _domainName ].rewardCoefficient = _rewardCoefficient;
+        billboardShowersDomainNames.push( _domainName );
+        totalCoefficient += _rewardCoefficient;
+    }
+
+
+    function deactivateBillboardShower( string calldata _domainName ) external {
+        require( billboardShowers[ _domainName ].ownerAddress == msg.sender, 'not owner' );
+        billboardShowers[ _domainName ].isActive = false;
+
+    }
+
     //ingilizceye çevir
-    //ipfs api .com'la mı bitiyor diye kontrol edecek ve urlden sonraki kısma bakacak mesela *'sa ona göre değilse ona göre javascript kontrol edecek girilen parametreye göre
+    //ipfs api .com, .com.tr ya da .net vb'le mi bitiyor diye kontrol edecek ve urlden sonraki kısma bakacak mesela *'sa ona göre değilse ona göre javascript kontrol edecek girilen parametreye göre
 
     //web traffic api'ı farklı kod olacak ve DAO karar verecek
-
-    function reportBillBoardShower( string calldata _domainName, string calldata _reportURL ) external {
+    //chainlink
+    function reportBillboardShower( string calldata _domainName ) external {
 
     }
 
