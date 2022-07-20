@@ -1,7 +1,7 @@
 import React, {useRef, useEffect, useState, Suspense} from "react";
 import AddGrid from "../AddGrid/AddGrid";
 import { subMinutes, isBefore } from 'date-fns';
-import VisibilitySensor from 'react-visibility-sensor';
+import {Grid} from 'react-virtualized';
 import './TimeLine.css';
 
 
@@ -12,37 +12,35 @@ export default function TimeLine(props){
     const [counter, setCounter] = useState(0)
     const index = 8;
 
-    const start = new Date(subMinutes(chosenDate,chosenDate.getHours()*60+chosenDate.getMinutes()))
-    const end = new Date(subMinutes(start,-60*24))
-    for(let i = start; isBefore(i,end); i=subMinutes(i,-1)){
-                /*if(i === chosenDate){
-                    cards.push(<VisibilitySensor>
-                                    {({isVisible}) =>
-                                        <div ref={useRef} className="card"><AddGrid chosenDate={i}/></div>
-                                    }
-                                </VisibilitySensor>)
-                    }
-                else cards.push(<VisibilitySensor>
-                                    {({isVisible}) =>
-                                    <div className="card"><AddGrid chosenDate={i}/></div>
-                                     }
-                                </VisibilitySensor>)
-                */
-        cards.push(i);
-
-    }
-    return(
-        <div className="cards">{
-            cards.map((date)=>{
-                return(
-                    <VisibilitySensor>
-                    {({isVisible}) =>
-                        <div className="cards-item"><AddGrid chosenDate={date}/></div>
-                    }
-                    </VisibilitySensor>
-                )
-            })
+    let start = new Date(subMinutes(chosenDate,chosenDate.getHours()*60+chosenDate.getMinutes()))
+    //const end = new Date(subMinutes(start,-60*24))
+    for(var j = 0; j < 1440/4; j++){
+        const column = []
+        for(var k = 0; k < 4; k++){
+            column.push(<div className="cards-item"><AddGrid chosenDate={start}/></div>)
+            start = subMinutes(start,-1)
         }
-        </div>
+        cards.push(column)
+    }
+
+    function cellRenderer({columnIndex, key, rowIndex, style}) {
+        return (
+          <div key={key} style={style}>
+            {cards[rowIndex][columnIndex]}
+          </div>
+        );
+    }
+
+    return(
+            <Grid
+            //scrollToRow={(chosenDate.getHours()*60+chosenDate.getMinutes())/4}
+            cellRenderer={cellRenderer}
+            columnCount={cards[0].length}
+            columnWidth={500}
+            height={1000}
+            rowCount={cards.length}
+            rowHeight={200}
+            width={2000}
+            />
     )
 }
