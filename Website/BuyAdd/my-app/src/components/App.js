@@ -22,28 +22,37 @@ const App = ()=>{
     const handleClickDate = (chosenDate)=>{
         setNewDate(chosenDate)
     }
+
     const handleClickTime = (chosenTime)=>{
         chosenDate.setHours(chosenTime.getHours());
         chosenDate.setMinutes(chosenTime.getMinutes());
         setNewDate(convertToUTC(chosenDate))
         setChosen(true)
     }
+
     const handleClickNowButton = ()=>{
         setNewDate(new Date())
         setChosen(true)
     }
-    
+
+    const changeChosenDate = (value)=>{
+        setNewDate(dateAdd(chosenDate,{minutes: value}))
+    }
+
     return(
         <div>
             <div className='dater'>
                 <div><img className="main-header" src={MainHeader}/></div>
-                <BasicDatePicker className="date-picker" handleClickDate = {handleClickDate}/>
-                <BasicTimePicker className="time-picker" handleClickTime = {handleClickTime}/>
+                <BasicDatePicker className="date-picker" chosenDate = {chosenDate} handleClickDate = {handleClickDate}/>
+                <BasicTimePicker className="time-picker" chosenDate = {chosenDate} handleClickTime = {handleClickTime}/>
                 <button className="now-button" onClick={handleClickNowButton}>Now</button>
-                {isChosen && <div>{chosenDate.toUTCString()}</div>}
+                <div>{chosenDate.toUTCString()}</div>
             </div>
             <div>
-                {isChosen && <TimeLine chosenHour={chosenDate.getUTCHours()}/>}    
+                <TimeLine
+                    changeChosenDate={changeChosenDate}
+                    chosenDate={chosenDate}
+                />    
             </div>        
         </div>
     )

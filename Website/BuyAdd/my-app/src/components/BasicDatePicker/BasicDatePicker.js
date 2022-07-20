@@ -4,8 +4,11 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-export default function BasicDatePicker({handleClickDate}) {
-  const [value, setValue] = React.useState(null);
+export default function BasicDatePicker({handleClickDate,chosenDate}) {
+  const [value, setValue] = React.useState(chosenDate);
+  React.useEffect(()=>{
+    setValue(chosenDate)
+  }, [chosenDate])
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>

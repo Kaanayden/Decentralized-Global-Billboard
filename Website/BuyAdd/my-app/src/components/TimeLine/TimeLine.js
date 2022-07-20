@@ -1,29 +1,40 @@
-import React, {useRef, useEffect} from "react";
+import React, {useRef, useEffect, useState} from "react";
+import AddGrid from "../AddGrid/AddGrid";
+import Carousel from '../Carousel/Carousel';
 import './TimeLine.css';
 
-export default function TimeLine({chosenHour}){
-    const chosenHourRef = useRef()
-    const buttons = [];
+
+export default function TimeLine(props){
+    const {chosenDate, changeChosenDate} = props
+    const chosenRef = useRef()
+    const [buttons, setButtons] = useState(createButtons(20));
+    const index = 1;
+
+    
     function createButtons(n){
+        const button = []
         for(var i = 0; i < n; i++){
-            if(i == chosenHour)buttons.push(<li><button ref={chosenHourRef}>Chosen</button></li>)
-            else buttons.push(<li><button>{i}</button></li>)
+            button.push(<li className="add-grid"><AddGrid chosenDate={chosenDate}/></li>)
         }
         //setButtons(buttons);
-        return buttons;
+        return button;
     }
-
     useEffect(()=>{
-        chosenHourRef.current.scrollIntoView({
-            behavior: "smooth",
-        });
-    }, [chosenHour])
+        setButtons(buttons)
+        console.log("deniyoz")
+    },[chosenDate])
+
 
     return(
         <div>
-            <ul>
-                {createButtons(100)}
-            </ul>
+            <Carousel
+                show = {10}
+                chosenDate = {chosenDate}
+                changeChosenDate = {changeChosenDate}
+                index = {index}
+            >
+                {buttons}
+            </Carousel>
         </div>
     )
 }
