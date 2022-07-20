@@ -1,7 +1,7 @@
 import React, {useRef, useEffect, useState, Suspense} from "react";
 import AddGrid from "../AddGrid/AddGrid";
 import { subMinutes, isBefore } from 'date-fns';
-import {Grid} from 'react-virtualized';
+import {Grid, WindowScroller, AutoSizer} from 'react-virtualized';
 import './TimeLine.css';
 
 
@@ -32,15 +32,27 @@ export default function TimeLine(props){
     }
 
     return(
-            <Grid
-            //scrollToRow={(chosenDate.getHours()*60+chosenDate.getMinutes())/4}
-            cellRenderer={cellRenderer}
-            columnCount={cards[0].length}
-            columnWidth={500}
-            height={1000}
-            rowCount={cards.length}
-            rowHeight={200}
-            width={2000}
-            />
+            
+
+            <WindowScroller>
+  {({ height, isScrolling, scrollTop }) => (
+    <AutoSizer disableHeight>
+      {({ width }) => (
+        <Grid
+        //scrollToRow={(chosenDate.getHours()*60+chosenDate.getMinutes())/4}
+        autoHeight
+        height = {height}
+        cellRenderer={cellRenderer}
+        columnCount={cards[0].length}
+        columnWidth={500}
+        rowCount={cards.length}
+        rowHeight={200}
+        width={2000}
+        scrollTop={scrollTop}
+        />
+      )}
+    </AutoSizer>
+  )}
+</WindowScroller>
     )
 }
