@@ -44,6 +44,57 @@ contract DecentralizedGlobalBillboard is ERC20, ERC20Burnable, ERC20Permit {
         address owner;
     }
 
+//IPFS APIs Urls
+    string public TRAFFIC_AND_FIRST_BILLBOARD_CHECKER_API_URL;
+    string public BILLBOARD_CHECKER_API_URL;
+
+    enum Target {
+        TRAFFIC,
+        BILLBOARD_CHECKER
+    }
+
+    Proposal[] public proposals;
+
+    mapping( uint => mapping(address => bool) ) isVoted;
+
+    struct Proposal {
+        Target target;
+        string proposedURL;
+        uint requiredVotes;
+        uint acceptingVotes;
+        mapping( address => bool ) isVoted;
+        bool isDone;
+    }
+
+    function proposeVoting( Target _target, string calldata _proposedURL) external {
+        Proposal storage proposal = proposals.push();
+        proposal.target = _target;
+        proposal.proposedURL = _proposedURL;
+        proposal.requiredVotes = totalSupply() / 2;
+    }
+
+    function executeProposal( uint id ) external {
+        require( proposals[id].requiredVotes > 0, "not active proposal" );
+        require( proposals[id].isDone == false, "already done" );
+        require( proposals[id].acceptingVotes >= proposals[id].requiredVotes, "not accepted proposal" );
+        if( proposals[id].target == Target.TRAFFIC ) {
+            TRAFFIC_AND_FIRST_BILLBOARD_CHECKER_API_URL = proposals[id].proposedURL;
+        } else {
+            BILLBOARD_CHECKER_API_URL = proposals[id].proposedURL;
+        }
+
+        proposals[id].isDone = true; // to prevent reapply this Url
+    }
+
+    function giveVote( uint id ) external {
+        address msgSender = msg.sender;
+        require( proposals[id].isVoted[ msgSender ] == false, 'already voted' );
+        require( proposals[id].requiredVotes > 0, "not active proposal" );
+        uint votingPower = balanceOf( msgSender );
+        proposals[id].acceptingVotes += votingPower;
+        proposals[id].isVoted[ msgSender ] = true;
+    }
+
 //saved as domain name in mapping
     struct BillboardShower {
         //string domainName;
@@ -247,6 +298,9 @@ contract DecentralizedGlobalBillboard is ERC20, ERC20Burnable, ERC20Permit {
         billboardShowers[ _domainName ].startTime = time;
 
     }
+
+
+
 
 
     
