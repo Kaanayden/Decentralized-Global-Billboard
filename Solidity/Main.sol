@@ -19,17 +19,19 @@ contract DecentralizedGlobalBillboard is ERC20, ERC20Burnable, ERC20Permit {
     uint constant BID_START_TIME = 2 days;
     uint constant DEFAULT_PRICE = 0.01 ether;
     uint constant AD_DURATION = 1 minutes;
-    uint constant BURN_RATE = 20;
+    uint constant BURN_RATE = 20; //hundred percent
 
     
 
 //Billboard showers
-    uint constant COEFFICENT_INCREASE_PERIOD = 1 hours;
+    uint constant COEFFICENT_INCREASE_PERIOD = 1 seconds;
     //uint constant COEFFICENT_INCREASE_START_DURATION = 24 hours; //to give time to reporters
     //uint constant MINUS_PER_SHOWER = COEFFICENT_INCREASE_START_DURATION / COEFFICENT_INCREASE_PERIOD;
     //uint public billboardShowerNumber;
     string[] public billboardShowersDomainNames;
-    uint public totalCoefficient;
+    uint public lastTotalCoefficient;
+    uint public lastTotalCoefficientRefreshTime;
+    uint public currentCoefficientSum;
     uint public billboardShowerPool;
 
     mapping( string => BillboardShower ) public billboardShowers;
@@ -56,9 +58,11 @@ contract DecentralizedGlobalBillboard is ERC20, ERC20Burnable, ERC20Permit {
     uint public totalRevenue;
 
 
+
+
     //erc20 yap
 
-    distributeRevenue( uint value ) {
+    function distributeRevenue( uint value ) internal {
         uint tokenToBurn = value * BURN_RATE / 100;
         _burn( address(this), tokenToBurn );
         uint remaingTokens = value - tokenToBurn;
@@ -82,7 +86,7 @@ contract DecentralizedGlobalBillboard is ERC20, ERC20Burnable, ERC20Permit {
         time = time / AD_DURATION * AD_DURATION;
         //get same time 2 days ago
         uint lastTime = time - 2 days;
-        Advertisement memory ad = advertisements[time];
+        Advertisement memory ad = advertisements[lastTime];
         uint lastPrice = ad.startPrice;
         uint bidTime = ad.bidTime;
         //converts int
@@ -91,7 +95,7 @@ contract DecentralizedGlobalBillboard is ERC20, ERC20Burnable, ERC20Permit {
         // lastPrice * (coefficient * 4 + 0.5) = lastPrice * coefficient * 4 + lastPrice / 2
         uint calculatedPrice = 4 * lastPrice * (lastTime - bidTime) * (lastTime - bidTime) / ( ( BID_START_TIME - LAST_BID_TIME ) * ( BID_START_TIME - LAST_BID_TIME ) ) + lastPrice / 2;
         if( calculatedPrice == 0 ) {
-            calculatedPrice = lastPrice / 2;
+            calculatedPrice = DEFAULT_PRICE / 2;
         }
          return calculatedPrice;
     }
@@ -175,17 +179,25 @@ contract DecentralizedGlobalBillboard is ERC20, ERC20Burnable, ERC20Permit {
 
 
     function afterBeAPIRequest( string calldata _domainName, uint _rewardCoefficient ) public {
-
+        uint time = block.timestamp;
         billboardShowers[ _domainName ].isActive = true;
         billboardShowers[ _domainName ].rewardCoefficient = _rewardCoefficient;
         billboardShowersDomainNames.push( _domainName );
-        totalCoefficient += _rewardCoefficient;
+        lastTotalCoefficient = lastTotalCoefficient + (time - lastTotalCoefficientRefreshTime) * currentCoefficientSum;
+        currentCoefficientSum += _rewardCoefficient;
+        lastTotalCoefficientRefreshTime = time;
     }
 
 
     function deactivateBillboardShower( string calldata _domainName ) external {
-        require( billboardShowers[ _domainName ].ownerAddress == msg.sender, 'not owner' );
+        BillboardShower memory billboardShower = billboardShowers[ _domainName ];
+        require( billboardShower.ownerAddress == msg.sender, 'not owner' );
+        require( billboardShower.isActive == true, 'already not active' );
+        withdrawReward( _domainName );
         billboardShowers[ _domainName ].isActive = false;
+        uint time = block.timestamp;
+        currentCoefficientSum -= billboardShower.rewardCoefficient;
+        //also add remove from array
 
     }
 
@@ -198,6 +210,42 @@ contract DecentralizedGlobalBillboard is ERC20, ERC20Burnable, ERC20Permit {
 
     }
 
+    function getReward( string calldata _domainName ) external view returns(uint) {
+        uint time = block.timestamp;
+        BillboardShower memory billboardShower = billboardShowers[ _domainName ];
+        uint currentAdShowerCoefficient = billboardShower.rewardCoefficient * (time - billboardShower.startTime);
+        uint currentTotalCoefficient = lastTotalCoefficient + (time - lastTotalCoefficientRefreshTime) * currentCoefficientSum;
+        uint reward = billboardShowerPool * currentAdShowerCoefficient / currentTotalCoefficient / COEFFICENT_INCREASE_PERIOD * COEFFICENT_INCREASE_PERIOD;
+        return reward;
+    }
+
+    function getCurrentTotalCoefficient() external view returns( uint ) {
+        uint time = block.timestamp;
+        uint currentTotalCoefficient = lastTotalCoefficient + (time - lastTotalCoefficientRefreshTime) * currentCoefficientSum;
+        return currentTotalCoefficient;
+    }
+
+    function getCurrentAdShowerCoefficent( string calldata _domainName ) external view returns(uint) {
+        BillboardShower memory billboardShower = billboardShowers[ _domainName ];
+        uint currentAdShowerCoefficient = billboardShower.rewardCoefficient * (block.timestamp - billboardShower.startTime);
+        return currentAdShowerCoefficient;
+    }
+
+    function withdrawReward( string calldata _domainName ) public {
+        BillboardShower memory billboardShower = billboardShowers[ _domainName ];
+        require( billboardShower.isActive == true, 'must be active' );
+        uint time = block.timestamp;
+        // pool * user's current coeffiecnt / current total coefficient
+        uint currentAdShowerCoefficient = billboardShower.rewardCoefficient * (time - billboardShower.startTime);
+        uint currentTotalCoefficient = lastTotalCoefficient + (time - lastTotalCoefficientRefreshTime) * currentCoefficientSum;
+        uint reward = billboardShowerPool * currentAdShowerCoefficient / currentTotalCoefficient / COEFFICENT_INCREASE_PERIOD * COEFFICENT_INCREASE_PERIOD;
+        _transfer( address(this),  billboardShower.ownerAddress, reward );
+        billboardShowerPool -= reward;
+        lastTotalCoefficient = currentTotalCoefficient - currentAdShowerCoefficient;
+        lastTotalCoefficientRefreshTime = time;
+        billboardShowers[ _domainName ].startTime = time;
+
+    }
 
 
     
