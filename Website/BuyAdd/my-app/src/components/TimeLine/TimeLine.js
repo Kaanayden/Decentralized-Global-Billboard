@@ -1,7 +1,8 @@
 import React, {useRef, useEffect, useState, Suspense} from "react";
 import AddGrid from "../AddGrid/AddGrid";
-import { subMinutes, isBefore } from 'date-fns';
+import { subMinutes, isBefore, isEqual } from 'date-fns';
 import {Grid, WindowScroller, AutoSizer} from 'react-virtualized';
+import Infinite from 'react-infinite';
 import './TimeLine.css';
 
 
@@ -15,44 +16,30 @@ export default function TimeLine(props){
     let start = new Date(subMinutes(chosenDate,chosenDate.getHours()*60+chosenDate.getMinutes()))
     //const end = new Date(subMinutes(start,-60*24))
     for(var j = 0; j < 1440/4; j++){
-        const column = []
+        const row = []
         for(var k = 0; k < 4; k++){
-            column.push(<div className="cards-item"><AddGrid chosenDate={start}/></div>)
+          if(isEqual(start,chosenDate)){
+            row.push(<div ref={chosenRef} className="cards-item"><AddGrid chosenDate={start}/></div>)
+          }
+          else row.push(<div className="cards-item"><AddGrid chosenDate={start}/></div>)
             start = subMinutes(start,-1)
         }
-        cards.push(column)
+        cards.push(<div className="cards">{row[0]}{row[1]}{row[2]}{row[3]}</div>)
     }
-
-    function cellRenderer({columnIndex, key, rowIndex, style}) {
-        return (
-          <div key={key} style={style}>
-            {cards[rowIndex][columnIndex]}
-          </div>
-        );
-    }
+    useEffect(()=>{
+      chosenRef.current?.scrollIntoView();
+    },[chosenDate])
 
     return(
-            
-
-            <WindowScroller>
-  {({ height, isScrolling, scrollTop }) => (
-    <AutoSizer disableHeight>
-      {({ width }) => (
-        <Grid
-        //scrollToRow={(chosenDate.getHours()*60+chosenDate.getMinutes())/4}
-        autoHeight
-        height = {height}
-        cellRenderer={cellRenderer}
-        columnCount={cards[0].length}
-        columnWidth={500}
-        rowCount={cards.length}
-        rowHeight={200}
-        width={2000}
-        scrollTop={scrollTop}
-        />
-      )}
-    </AutoSizer>
-  )}
-</WindowScroller>
+      <div>
+        <Infinite 
+          containerHeight={100}
+          elementHeight={200}
+          useWindowAsScrollContainer>
+          {cards.map((card)=>{
+            return card;
+          })}
+        </Infinite>
+      </div>
     )
 }
