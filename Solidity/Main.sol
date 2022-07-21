@@ -62,7 +62,7 @@ contract DecentralizedGlobalBillboard is ERC20, ERC20Burnable, ERC20Permit {
 
     //erc20 yap
 
-    function distributeRevenue( uint value ) internal {
+    function _distributeRevenue( uint value ) internal {
         uint tokenToBurn = value * BURN_RATE / 100;
         _burn( address(this), tokenToBurn );
         uint remaingTokens = value - tokenToBurn;
@@ -151,7 +151,7 @@ contract DecentralizedGlobalBillboard is ERC20, ERC20Burnable, ERC20Permit {
         adStorage.bidAmount = price;
         adStorage.bidTime = now;
         adStorage.owner = msgSender;
-        distributeRevenue( price );
+        _distributeRevenue( price );
     }
 
 //reward distrubiton
@@ -198,6 +198,7 @@ contract DecentralizedGlobalBillboard is ERC20, ERC20Burnable, ERC20Permit {
         uint time = block.timestamp;
         currentCoefficientSum -= billboardShower.rewardCoefficient;
         //also add remove from array
+        //ya da gerek yok name'leri frontende kontrol et ve banlı ve deactive olanları belirt
 
     }
 
