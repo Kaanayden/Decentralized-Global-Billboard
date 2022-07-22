@@ -1,8 +1,7 @@
 .main-header{
-    
-    width: 700px;
+    width: 200px;
     display: block;
-    margin-left: auto;
+    margin-left: 50px;
     margin-right: auto;
 
 }
@@ -13,4 +12,20 @@
     height: 55px;
     width: 55px;
     color: #3498db;
+}
+.all-app{
+    top: 0;
+    position: relative;
+}
+
+
+.dater{
+    top: 0;
+    position: relative;
+    z-index: 99999999999999999;
+    border: 1px solid #ffffff;
+    background-color: rgb(235, 0, 0);
+}
+.time-line{
+    position: relative;
 }

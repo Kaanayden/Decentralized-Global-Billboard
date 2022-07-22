@@ -17,6 +17,7 @@
     "react-infinite": "^0.13.0",
     "react-render-if-visible": "^2.1.0",
     "react-scripts": "5.0.1",
+    "react-sticky": "^6.0.3",
     "react-virtualized": "^9.22.3",
     "react-visibility-sensor": "^5.1.1",
     "web-vitals": "^2.1.4"
