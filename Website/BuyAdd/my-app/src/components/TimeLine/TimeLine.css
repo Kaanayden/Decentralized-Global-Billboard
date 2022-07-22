@@ -1,6 +1,5 @@
-button{
-    width: 55px;
-    height: 55px;
+html {
+    scroll-behavior: smooth;
 }
 .cards {
     display: flex;

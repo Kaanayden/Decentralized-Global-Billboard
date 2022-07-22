@@ -43,15 +43,25 @@ const App = ()=>{
         <div>
             <div className='dater'>
                 <div><img className="main-header" src={MainHeader}/></div>
-                <BasicDatePicker className="date-picker" chosenDate = {chosenDate} handleClickDate = {handleClickDate}/>
-                <BasicTimePicker className="time-picker" chosenDate = {chosenDate} handleClickTime = {handleClickTime}/>
+                <BasicDatePicker className="date-picker" 
+                    chosenDate = {dateAdd( chosenDate,{
+                        minutes: chosenDate.getTimezoneOffset()
+                        } )} 
+                    handleClickDate = {handleClickDate}/>
+                <BasicTimePicker className="time-picker" 
+                    chosenDate = {dateAdd( chosenDate,{
+                        minutes: chosenDate.getTimezoneOffset()
+                        } )}  
+                    handleClickTime = {handleClickTime}/>
                 <button className="now-button" onClick={handleClickNowButton}>Now</button>
                 <div>{chosenDate.toUTCString()}</div>
             </div>
             <div>
                 <TimeLine
                     changeChosenDate={changeChosenDate}
-                    chosenDate={chosenDate}
+                    chosenDate={dateAdd( chosenDate,{
+                        minutes: chosenDate.getTimezoneOffset()
+                        } )} 
                 />    
             </div>        
         </div>
