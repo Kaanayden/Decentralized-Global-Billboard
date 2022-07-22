@@ -4,11 +4,25 @@
 <p id="TrafficData"></p>
 
 <script>
+    //Ad shower should allow "Access Control Allow Origin for IPFS website link or all websites to ensure fetch function works.
+    const AD_ELEMENT = '<p id="TrafficData"></p>'
+
     let result;
     
-    fetch("https://hackfs.com/", {
-    }).then(data => console.log (data.status) );
-    document.getElementById("TrafficData").innerHTML = result;
+    fetch("https://bafybeieuvzmqaa4pfyubqiidrtgzyn4uwrkwrkv4et7exp6txov6jcagua.ipfs.dweb.link/", {
+    }).then(data =>data.text() )
+    .then( data => {
+        if( data.includes( AD_ELEMENT ) ) {
+            result = true;
+        } else {
+            result = false;
+        }
+
+        let jsonText = '{\n "Result": "' + result + '"\n}';
+    document.write( jsonText );
+    
+    } );
+    
 </script>
 
  
