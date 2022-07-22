@@ -1,0 +1,28 @@
+.nav-bar{
+    background: rgb(252, 252, 252);
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.dater{
+    width: 30%;
+    top: 5px;
+    bottom: 5px;
+    padding: 25px 16px;
+    background: rgb(255, 255, 255);
+    color: white;
+    
+}
+.now-button{
+    cursor: pointer;
+    border: 1px solid #b4b8bc;
+    background-color: transparent;
+    height: 56px;
+    width: 56px;
+    color: black;
+    border-radius: 10%;
+}

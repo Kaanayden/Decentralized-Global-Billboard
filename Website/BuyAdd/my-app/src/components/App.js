@@ -4,8 +4,7 @@ import './App.css';
 import BasicDatePicker from './BasicDatePicker/BasicDatePicker';
 import BasicTimePicker from './BasicTimePicker/BasicTimePicker';
 import TimeLine from './TimeLine/TimeLine';
-import MainHeader from './images/main-header.jpg';
-import { StickyContainer, Sticky } from 'react-sticky';
+import NavBar from './NavBar/NavBar';
 
 function convertToUTC( date ) {
     return dateAdd( date,{
@@ -42,32 +41,22 @@ const App = ()=>{
 
     return(
         <div className='all-app'>
-            <StickyContainer>
-                <Sticky>{({ style }) => <h1 style={style}>{
-                    <div className='dater'>
-                        <BasicDatePicker className="date-picker" 
-                            chosenDate = {dateAdd( chosenDate,{
-                                minutes: chosenDate.getTimezoneOffset()
-                                } )} 
-                            handleClickDate = {handleClickDate}/>
-                        <BasicTimePicker className="time-picker" 
-                            chosenDate = {dateAdd( chosenDate,{
-                                minutes: chosenDate.getTimezoneOffset()
-                                } )}  
-                            handleClickTime = {handleClickTime}/>
-                        <button className="now-button" onClick={handleClickNowButton}>Now</button>
-                        <div>{chosenDate.toUTCString()}</div>
-                    </div> }  
-                </h1>}</Sticky>
-            <div className='time-line'>
+            <div className='nav-bar'>
+                <NavBar 
+                    chosenDate={chosenDate}
+                    handleClickDate={handleClickDate}
+                    handleClickNowButton={handleClickNowButton}
+                    handleClickTime={handleClickTime}
+                />
+            </div>
+            <div className='main'>
                 <TimeLine
                     changeChosenDate={changeChosenDate}
                     chosenDate={dateAdd( chosenDate,{
                         minutes: chosenDate.getTimezoneOffset()
                         } )} 
                 />    
-            </div>
-            </StickyContainer>       
+            </div>      
         </div>
     )
   }

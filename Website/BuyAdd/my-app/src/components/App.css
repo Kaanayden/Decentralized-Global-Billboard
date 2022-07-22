@@ -5,27 +5,24 @@
     margin-right: auto;
 
 }
-.now-button{
-    cursor: pointer;
-    border: 1px solid #3498db;
-    background-color: transparent;
-    height: 55px;
-    width: 55px;
-    color: #3498db;
-}
+
 .all-app{
     top: 0;
     position: relative;
 }
 
 
-.dater{
-    top: 0;
-    position: relative;
-    z-index: 99999999999999999;
-    border: 1px solid #ffffff;
-    background-color: rgb(235, 0, 0);
-}
-.time-line{
-    position: relative;
-}
+.nav-bar {
+    height: 100px;
+    overflow: hidden;
+    background-color: white;
+    position: fixed; /* Set the navbar to fixed position */
+    top: 0; /* Position the navbar at the top of the page */
+    width: 100%; /* Full width */
+    z-index: 9999;
+    border-bottom: 1px solid;
+    border-color: #b4b8bc;
+  }
+  .main {
+    margin-top: 115px; /* Add a top margin to avoid content overlay */
+  }
