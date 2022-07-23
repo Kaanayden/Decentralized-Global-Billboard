@@ -26,6 +26,10 @@ contract DecentralizedGlobalBillboard is ERC20, ERC20Burnable, ERC20Permit, Chai
     }
 
     event RequestTraffic(bytes32 indexed requestId, uint256 traffic, string domainName);
+    event MadeProposal( Target indexed targetType, string proposedURL, uint index );
+    event AdBuy( uint time, string imageURI );
+    event NewBillboard( address indexed owner, string domainName );
+    event BannedBillboard( address indexed owner, string domainName );
 
     function requestTrafficData(Target targetType, string memory checkUrl) internal {
         Chainlink.Request memory req = buildChainlinkRequest(jobId, address(this), this.fulfill.selector);
@@ -70,6 +74,8 @@ contract DecentralizedGlobalBillboard is ERC20, ERC20Burnable, ERC20Permit, Chai
                     lastTotalCoefficient = lastTotalCoefficient + (time - lastTotalCoefficientRefreshTime) * currentCoefficientSum;
                     currentCoefficientSum += _rewardCoefficient;
                     lastTotalCoefficientRefreshTime = time;
+
+                    emit NewBillboard( billboardShowers[ _domainName ].ownerAddress, _domainName );
                 }
             } else {
                 if( _traffic == 0 ) {
@@ -93,6 +99,8 @@ contract DecentralizedGlobalBillboard is ERC20, ERC20Burnable, ERC20Permit, Chai
                     billboardShowers[ _domainName ].isActive = false;
                     billboardShowers[ _domainName ].isBanned = true;
                     currentCoefficientSum -= billboardShower.rewardCoefficient;
+
+                    emit BannedBillboard( billboardShower.ownerAddress, _domainName );
                 }
             }
     }
@@ -164,6 +172,8 @@ contract DecentralizedGlobalBillboard is ERC20, ERC20Burnable, ERC20Permit, Chai
         proposal.target = _target;
         proposal.proposedURL = _proposedURL;
         proposal.requiredVotes = totalSupply() / 2;
+
+        emit MadeProposal( _target, _proposedURL, proposals.length - 1 );
     }
 
     function executeProposal( uint id ) external {
@@ -204,7 +214,6 @@ contract DecentralizedGlobalBillboard is ERC20, ERC20Burnable, ERC20Permit, Chai
 
 
 
-    //erc20 yap
 
     function _distributeRevenue( uint value ) internal {
         uint tokenToBurn = value * BURN_RATE / 100;
@@ -215,7 +224,7 @@ contract DecentralizedGlobalBillboard is ERC20, ERC20Burnable, ERC20Permit, Chai
     }
 
 
-    //sahip olduğu adleri göstererek yapılabilir
+
     function changeAdURI( uint time, string calldata _imageURI ) external {
         time = time / AD_DURATION * AD_DURATION;
         address msgSender = msg.sender;
@@ -244,21 +253,7 @@ contract DecentralizedGlobalBillboard is ERC20, ERC20Burnable, ERC20Permit, Chai
          return calculatedPrice;
     }
 
-        function getMockStartPrice( uint time, uint lastPrice, uint bidTime ) public view returns( uint ) {
-        time = time / AD_DURATION * AD_DURATION;
-        //get same time 2 days ago
-        uint lastTime = time - 2 days;
-        //uint lastPrice = advertisements[ lastTime ].bidAmount;
-        //converts int
-        //coefficient = ( (lastTime - bidTime) * (lastTime - bidTime) ) / (( BID_START_TIME - LAST_BID_TIME ) * ( BID_START_TIME - LAST_BID_TIME ))
-        //optimizing price for more ad buying, coefficient is between 0 and 1 
-        // lastPrice * (coefficient * 4 + 0.5) = lastPrice * coefficient * 4 + lastPrice / 2
-        uint calculatedPrice = 4 * lastPrice * (lastTime - bidTime) * (lastTime - bidTime) / ( ( BID_START_TIME - LAST_BID_TIME ) * ( BID_START_TIME - LAST_BID_TIME ) ) + lastPrice / 2;
-        if( calculatedPrice == 0 ) {
-            calculatedPrice = DEFAULT_PRICE / 2;
-        }
-         return calculatedPrice; 
-    }
+
 
     function getCurrentPrice( uint time ) public view returns( uint ) {
         time = time / AD_DURATION * AD_DURATION;
@@ -266,16 +261,6 @@ contract DecentralizedGlobalBillboard is ERC20, ERC20Burnable, ERC20Permit, Chai
         return getStartPrice( time ) * (time - LAST_BID_TIME - block.timestamp) / ( BID_START_TIME - LAST_BID_TIME );
     }
 
-    function getCurrentMockPrice( uint time, uint lastPrice, uint bidTime, uint now ) public view returns( uint ) {
-        time = time / AD_DURATION * AD_DURATION;
-        // startPrice * remaining time / total duration
-        return getMockStartPrice( time, lastPrice, bidTime ) * (time - LAST_BID_TIME - now) / ( BID_START_TIME - LAST_BID_TIME );
-    }
-
-        function twoDays(  ) public view returns( uint ) {
-
-         return 2 days;
-    }
 
     function buyAd( uint time, string calldata _imageURI ) external {
         time = time / AD_DURATION * AD_DURATION;
@@ -296,17 +281,18 @@ contract DecentralizedGlobalBillboard is ERC20, ERC20Burnable, ERC20Permit, Chai
         adStorage.bidTime = now;
         adStorage.owner = msgSender;
         _distributeRevenue( price );
+
+        emit AdBuy( time, _imageURI );
     }
 
 //reward distrubiton
-//%80 billboard showers, %20 burn(so token holders earn), birazıyla da link ödemeli aslında
+//%80 billboard showers, %20 burn(therefore, token holders earn)
 
 //billboard (ad) showers
     //reward coefficent increases hourly to prevent overflowing all coefficents sum and prevent rewarding token to misapplication of billboard
 
 
-    //bunda chainlink gerek yok(varmış reward coefficent hesaplanması lazım)
-    //deposit yatırsa iyi olabilir aslında sahteyi önlemek için ve belki bi kez kontrolden geçse iyi olabiir ?
+
     function beBillboardShower( string calldata _domainName ) external {
         BillboardShower memory billboardShower = billboardShowers[ _domainName ];
         BillboardShower storage store = billboardShowers[ _domainName ];
@@ -327,15 +313,13 @@ contract DecentralizedGlobalBillboard is ERC20, ERC20Burnable, ERC20Permit, Chai
         withdrawReward( _domainName );
         billboardShowers[ _domainName ].isActive = false;
         currentCoefficientSum -= billboardShower.rewardCoefficient;
-        //also add remove from array
-        //ya da gerek yok name'leri frontende kontrol et ve banlı ve deactive olanları belirt
+        
 
     }
 
-    //ingilizceye çevir
-    //ipfs api .com, .com.tr ya da .net vb'le mi bitiyor diye kontrol edecek ve urlden sonraki kısma bakacak mesela *'sa ona göre değilse ona göre javascript kontrol edecek girilen parametreye göre
 
-    //web traffic api'ı farklı kod olacak ve DAO karar verecek
+
+    //web traffic api can be changable with DAO proposals by anyone. If proposal reach a consensus of half of total supply it becoming new API.
     //chainlink
     function reportBillboardShower( string calldata _domainName ) external {
         BillboardShower memory billboardShower = billboardShowers[ _domainName ];
@@ -381,10 +365,34 @@ contract DecentralizedGlobalBillboard is ERC20, ERC20Burnable, ERC20Permit, Chai
 
     }
 
+    function getCurrentAd() external view returns( string memory ) {
+        uint time = block.timestamp;
+        time = time / AD_DURATION * AD_DURATION;
+
+        return advertisements[ time ].imageURI;
+    }
+
+    //both limits are included
+    function getAdvertisementArray( uint startTime, uint finishTime ) external view returns( Advertisement[] memory ) {
+        startTime = startTime / AD_DURATION * AD_DURATION;
+        finishTime = finishTime / AD_DURATION * AD_DURATION;
+        uint count = (finishTime - startTime) / AD_DURATION + 1;
+        Advertisement[] memory ads = new Advertisement[]( count );
+        uint counter = 0;
+        for( uint i = startTime; i <= finishTime; i+= AD_DURATION ) {
+            ads[ counter ] = advertisements[ i ];
+            ++counter;
+        }
+        return ads;
+    }
 
 
-
-
-    
+    mapping( address => bool ) isMinted;
+    function mockMintTokens() external {
+        address msgSender = msg.sender;
+        require( isMinted[ msgSender ] == false, 'already minted' );
+        isMinted[ msgSender ] = true;
+        _mint(msgSender, 100 * 10 ** decimals());
+    } 
 
 }

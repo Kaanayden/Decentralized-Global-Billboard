@@ -8,6 +8,25 @@
 		"anonymous": false,
 		"inputs": [
 			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "time",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "imageURI",
+				"type": "string"
+			}
+		],
+		"name": "AdBuy",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
 				"indexed": true,
 				"internalType": "address",
 				"name": "owner",
@@ -27,6 +46,171 @@
 			}
 		],
 		"name": "Approval",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "domainName",
+				"type": "string"
+			}
+		],
+		"name": "BannedBillboard",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "bytes32",
+				"name": "id",
+				"type": "bytes32"
+			}
+		],
+		"name": "ChainlinkCancelled",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "bytes32",
+				"name": "id",
+				"type": "bytes32"
+			}
+		],
+		"name": "ChainlinkFulfilled",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "bytes32",
+				"name": "id",
+				"type": "bytes32"
+			}
+		],
+		"name": "ChainlinkRequested",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "enum DecentralizedGlobalBillboard.Target",
+				"name": "targetType",
+				"type": "uint8"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "proposedURL",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"name": "MadeProposal",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "domainName",
+				"type": "string"
+			}
+		],
+		"name": "NewBillboard",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			}
+		],
+		"name": "OwnershipTransferRequested",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			}
+		],
+		"name": "OwnershipTransferred",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "bytes32",
+				"name": "requestId",
+				"type": "bytes32"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "traffic",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "domainName",
+				"type": "string"
+			}
+		],
+		"name": "RequestTraffic",
 		"type": "event"
 	},
 	{
@@ -94,6 +278,13 @@
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "acceptOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -130,24 +321,6 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_domainName",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_rewardCoefficient",
-				"type": "uint256"
-			}
-		],
-		"name": "afterBeAPIRequest",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -223,11 +396,6 @@
 				"internalType": "string",
 				"name": "_domainName",
 				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_rewardCoefficient",
-				"type": "uint256"
 			}
 		],
 		"name": "beBillboardShower",
@@ -452,17 +620,80 @@
 	{
 		"inputs": [
 			{
-				"internalType": "string",
-				"name": "_domainName",
-				"type": "string"
-			}
-		],
-		"name": "getCurrentAdShowerCoefficent",
-		"outputs": [
+				"internalType": "bytes32",
+				"name": "_requestId",
+				"type": "bytes32"
+			},
 			{
 				"internalType": "uint256",
-				"name": "",
+				"name": "_traffic",
 				"type": "uint256"
+			}
+		],
+		"name": "fulfill",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "startTime",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "finishTime",
+				"type": "uint256"
+			}
+		],
+		"name": "getAdvertisementArray",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "imageURI",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "startPrice",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "bidAmount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "bidTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					}
+				],
+				"internalType": "struct DecentralizedGlobalBillboard.Advertisement[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getCurrentAd",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
 			}
 		],
 		"stateMutability": "view",
@@ -471,27 +702,12 @@
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "time",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "lastPrice",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "bidTime",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "now",
-				"type": "uint256"
+				"internalType": "string",
+				"name": "_domainName",
+				"type": "string"
 			}
 		],
-		"name": "getCurrentMockPrice",
+		"name": "getCurrentAdShowerCoefficent",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -524,35 +740,6 @@
 	{
 		"inputs": [],
 		"name": "getCurrentTotalCoefficient",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "time",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "lastPrice",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "bidTime",
-				"type": "uint256"
-			}
-		],
-		"name": "getMockStartPrice",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -666,6 +853,13 @@
 	},
 	{
 		"inputs": [],
+		"name": "mockMintTokens",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "name",
 		"outputs": [
 			{
@@ -691,6 +885,19 @@
 				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
 			}
 		],
 		"stateMutability": "view",
@@ -902,16 +1109,16 @@
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "twoDays",
-		"outputs": [
+		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
 			}
 		],
-		"stateMutability": "view",
+		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
