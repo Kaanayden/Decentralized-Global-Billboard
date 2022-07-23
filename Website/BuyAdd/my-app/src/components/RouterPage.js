@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import App from './App';
 import AdUpload from './AdUpload/AdUpload';
+import MetaConnect from './MetaMask/MetaMask';
  
 class RouterPage extends Component {
   render() {
@@ -18,6 +19,9 @@ class RouterPage extends Component {
           </Route>
           <Route path="/upload">
             <AdUpload />
+          </Route>
+          <Route path='/MetaMask'>
+            <MetaConnect/>
           </Route>
         </Switch>
       </div>
