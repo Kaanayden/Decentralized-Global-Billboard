@@ -14,7 +14,7 @@ function convertToUTC( date ) {
 
 const App = ()=>{
 
-    const [chosenDate, setNewDate] = useState(new Date())
+    const [chosenDate, setNewDate] = useState( new Date() )
     const [chosenTime, setNewTime] = useState(new Date())
     const [isChosen, setChosen] = useState(false)
    // const chosenHourRef = useRef();
@@ -61,4 +61,4 @@ const App = ()=>{
     )
   }
 
-export default App
+export default App;
