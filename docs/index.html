@@ -1,30 +1,21 @@
 <html>
 <body>
 
-<p id="TrafficData"></p>
 
-<script>
-    //Ad shower should allow "Access Control Allow Origin for IPFS website link or all websites to ensure fetch function works.
-    const AD_ELEMENT = '<p id="TrafficData"></p>'
+<img class="GlobalBillboard" src="https://decentralized-billboard.herokuapp.com/currentAd">
+<p id="Lorem ipsum">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dignissim ornare porta. Maecenas vitae vestibulum nibh, eget dictum eros. Fusce et volutpat neque. Aliquam vel vulputate lectus. Nulla facilisi. Duis finibus nulla sed finibus vehicula. Quisque metus enim, pellentesque quis luctus vitae, interdum vitae est. Nunc nisi orci, lobortis a ornare nec, rhoncus et nunc. Aliquam accumsan mauris a lorem euismod, quis cursus augue fermentum.
 
-    let result;
-    
-    fetch("https://bafybeieuvzmqaa4pfyubqiidrtgzyn4uwrkwrkv4et7exp6txov6jcagua.ipfs.dweb.link/", {
-    }).then(data =>data.text() )
-    .then( data => {
-        if( data.includes( AD_ELEMENT ) ) {
-            result = true;
-        } else {
-            result = false;
-        }
+Sed feugiat risus ut euismod lacinia. In quis sapien ac velit lobortis vulputate. Praesent lacus justo, elementum vitae enim in, ornare commodo tortor. Pellentesque eleifend scelerisque laoreet. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eget ullamcorper justo, eget cursus turpis. Pellentesque nec commodo purus, et convallis magna. Phasellus vitae est vitae sem mollis venenatis at non neque. Fusce hendrerit felis neque, eget varius metus pellentesque id.
 
-        let jsonText = '{\n "RESULT": ' + result + '\n}';
-    document.write( jsonText );
-    el
-    
-    } );
-    
-</script>
+Quisque condimentum sodales nulla placerat sodales. Fusce quis mattis velit. Donec a elit a lacus semper lacinia quis tincidunt arcu. Nullam nisl lorem, fermentum a placerat a, mollis vel est. Aliquam porttitor turpis eu dolor dapibus, ac lobortis velit posuere. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec placerat faucibus neque vitae rutrum. Aliquam erat volutpat. Phasellus aliquet ex in posuere tempor. Proin pellentesque, turpis a auctor bibendum, elit diam ultrices justo, id egestas erat magna accumsan libero. Ut ac pellentesque sapien. Donec ut euismod dui, vitae sodales magna. Donec ullamcorper aliquet massa, sit amet luctus velit pulvinar quis.
+
+Vivamus venenatis quam in ex tristique, sed faucibus risus accumsan. Cras quis sollicitudin turpis, sed cursus arcu. Quisque eget mauris in ipsum porttitor mollis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Suspendisse sed arcu quis arcu accumsan mattis. Vestibulum ultrices erat sit amet libero finibus sagittis. Proin rutrum accumsan ullamcorper.
+
+Donec commodo dolor sit amet rutrum imperdiet. Ut nec nibh id ipsum molestie faucibus tincidunt id nibh. Etiam nec dignissim orci. Proin sem quam, sodales id dui pretium, accumsan blandit tortor. Praesent scelerisque eget massa in suscipit. Aliquam mollis libero nec enim gravida, vulputate iaculis enim pharetra. In dapibus lectus arcu, quis efficitur ex pulvinar ac. In sed ultrices sem. Quisque auctor luctus vulputate.
+</p>
+
+
 
  
 </body>
