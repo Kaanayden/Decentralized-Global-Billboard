@@ -12,7 +12,7 @@ html {
 }
 
 .cards-item {
-    /* There will be 4 cards per row */
+    border: 1px solid #b4b8bc;
     flex-basis: 24%;
 
     padding-left: 8px;
