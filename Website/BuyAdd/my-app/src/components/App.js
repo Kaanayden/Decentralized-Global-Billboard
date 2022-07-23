@@ -5,7 +5,7 @@ import BasicDatePicker from './BasicDatePicker/BasicDatePicker';
 import BasicTimePicker from './BasicTimePicker/BasicTimePicker';
 import TimeLine from './TimeLine/TimeLine';
 import NavBar from './NavBar/NavBar';
-import MetaConnect from './MetaMask/MetaMask';
+
 
 function convertToUTC( date ) {
     return dateAdd( date,{
@@ -59,7 +59,7 @@ const App = ()=>{
                 />    
             </div>    
             <div>
-                <MetaConnect/>
+                
             </div>  
         </div>
     )
