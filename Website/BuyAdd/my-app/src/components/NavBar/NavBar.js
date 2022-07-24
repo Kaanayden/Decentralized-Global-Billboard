@@ -9,6 +9,7 @@ function NavBar({chosenDate,handleClickDate,handleClickTime,handleClickNowButton
   return (
     <div className="nav-bar">
         <div className='dater'>
+            <button className="billboard-showers" onClick>Billboard Showers</button>
             <div className="date">{chosenDate.toUTCString()}</div>
             <BasicDatePicker className="date-picker" 
                 chosenDate = {dateAdd( chosenDate,{
