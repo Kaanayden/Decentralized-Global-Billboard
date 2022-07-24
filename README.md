@@ -24,4 +24,5 @@ Billboard Report page:
      
 
 IPFS & Filecoin used in Modal.js
+
 Covalent used in Billboard.js
