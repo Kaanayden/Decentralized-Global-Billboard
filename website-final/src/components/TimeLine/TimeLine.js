@@ -1,7 +1,7 @@
 import React, {useRef, useEffect, useState, Suspense} from "react";
 import AddGrid from "../AddGrid/AddGrid";
 import { subMinutes, isBefore, isEqual } from 'date-fns';
-
+import getEventsCovalent from '../Covalent';
 import './TimeLine.css';
 import { Modal } from "@mui/material";
 
