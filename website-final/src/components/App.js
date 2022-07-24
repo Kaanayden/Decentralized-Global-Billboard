@@ -83,19 +83,19 @@ export default function App() {
         />
         <Switch>
           <Route exact path="/">
-            <BuyAd/>
+            <BuyAd contract={contract}/>
           </Route>
           <Route path="/AdShowers">
-            <AdShowers />
+            <AdShowers contract={contract}/>
           </Route>
           <Route path="/ApiTest">
-            <ApiTest/>
+            <ApiTest contract={contract}/>
           </Route>
           <Route path="/Proposal">
-            <Proposal/>
+            <Proposal contract={contract}/>
           </Route>
           <Route path="/ReportBillboard">
-            <ReportBillboard/>
+            <ReportBillboard contract={contract}/>
           </Route>
         </Switch>
       </div>
