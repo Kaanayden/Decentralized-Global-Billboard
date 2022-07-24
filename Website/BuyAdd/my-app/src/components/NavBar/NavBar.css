@@ -9,7 +9,7 @@
 }
 
 .dater{
-    width: 30%;
+    width: 40%;
     top: 5px;
     bottom: 5px;
     padding: 25px 16px;
@@ -25,4 +25,19 @@
     width: 56px;
     color: black;
     border-radius: 10%;
+}
+.conn-button{
+    position: absolute;
+    right: 100px;
+    width: fit-content;
+    height: 56px;
+    cursor: pointer;
+    border: 1px solid #b4b8bc;
+    background-color: transparent;
+    color: black;
+    border-radius: 5%;
+}
+.date{
+    position: absolute;
+    left: 100px;
 }

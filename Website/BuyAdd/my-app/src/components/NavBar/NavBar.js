@@ -5,10 +5,11 @@ import BasicTimePicker from '../BasicTimePicker/BasicTimePicker';
 import '../NavBar/NavBar.css';
 
 
-function NavBar({chosenDate,handleClickDate,handleClickTime,handleClickNowButton}) {
+function NavBar({chosenDate,handleClickDate,handleClickTime,handleClickNowButton,connectWalletHandler,connButtonText}) {
   return (
     <div className="nav-bar">
         <div className='dater'>
+            <div className="date">{chosenDate.toUTCString()}</div>
             <BasicDatePicker className="date-picker" 
                 chosenDate = {dateAdd( chosenDate,{
                     minutes: chosenDate.getTimezoneOffset()
@@ -20,7 +21,7 @@ function NavBar({chosenDate,handleClickDate,handleClickTime,handleClickNowButton
                     } )}  
                 handleClickTime = {handleClickTime}/>
             <button className="now-button" onClick={handleClickNowButton}>Now</button>
-            <div>{chosenDate.toUTCString()}</div>
+            <button className='conn-button' onClick={connectWalletHandler}>{connButtonText}</button>
         </div>
     </div>
   );

@@ -7,15 +7,16 @@ import contractAbi from './abi'
 const contractAddress = '0x2Fb9CAaEc0aBEd9eBF9A2487aFEC5121a18A78b9';
 
 const MetamaskTest = () => {
-    console.log(contractAbi);
+    //console.log(contractAbi);
 	// deploy simple storage contract and paste deployed contract address here. This value is local ganache chain
 	
 
 	const [errorMessage, setErrorMessage] = useState(null);
 	const [defaultAccount, setDefaultAccount] = useState(null);
 	const [connButtonText, setConnButtonText] = useState('Connect Wallet');
+	const [billBoardShowers, setBilboardShowers] = useState([{isActive:true,isBanned:false,rewardCoefficent:8275,startTime:8457698,ownerAddress:895748}])
 
-	const [currentContractVal, setCurrentContractVal] = useState(false);
+	const [currentContractVal, setCurrentContractVal] = useState(null);
 
 	const [provider, setProvider] = useState(null);
 	const [signer, setSigner] = useState(null);
@@ -77,7 +78,7 @@ const MetamaskTest = () => {
 	const getCurrentVal = async () => {
 		let val = await contract.billboardShowers( "https://kaanayden.github.io/Decentralized-Global-Billboard/" );
 		console.log( val.isActive );
-		setCurrentContractVal(val.isActive.toString() );
+		setCurrentContractVal(val);
 	}
 	
 	return (
@@ -89,12 +90,26 @@ const MetamaskTest = () => {
 			</div>
 			<form onSubmit={setHandler}>
 				<input id="setText" type="text"/>
-				<button type={"submit"}> Update Contract </button>
+				<button type={"submit"}> AddYourDomain </button>
+				<div>You should have billboard ready in your website.</div>
 			</form>
 			<div>
 			<button onClick={getCurrentVal} style={{marginTop: '5em'}}> Get Current Contract Value </button>
 			</div>
-			{currentContractVal}
+   			<div>
+				{billBoardShowers.map((shower)=>{
+					return(
+						<div>
+							<div>{shower.isActive.toString()}</div>
+							<div>{shower.isBanned.toString()}</div>
+							<div>{shower.rewardCoefficent}</div>
+							<div>{shower.startTime}</div>
+							<div>{shower.ownerAddress}</div>
+						</div>
+					)
+				})}
+			</div>
+
 			{errorMessage}
             
 		</div>
