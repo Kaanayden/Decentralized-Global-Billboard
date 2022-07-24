@@ -1,0 +1,28 @@
+.main-header{
+    width: 200px;
+    display: block;
+    margin-left: 50px;
+    margin-right: auto;
+
+}
+
+.all-app{
+    top: 0;
+    position: relative;
+}
+
+
+.nav-bar {
+    height: 100px;
+    overflow: hidden;
+    background-color: white;
+    position: fixed; /* Set the navbar to fixed position */
+    top: 100px; /* Position the navbar at the top of the page */
+    width: 100%; /* Full width */
+    z-index: 9999;
+    border-bottom: 1px solid;
+    border-color: #b4b8bc;
+  }
+  .main {
+    margin-top: 115px; /* Add a top margin to avoid content overlay */
+  }

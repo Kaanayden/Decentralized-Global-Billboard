@@ -1,0 +1,20 @@
+html {
+    scroll-behavior: smooth;
+}
+.cards {
+    display: flex;
+
+    /* Put a card in the next row when previous cards take all width */
+    flex-wrap: wrap;
+
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+.cards-item {
+    border: 1px solid #b4b8bc;
+    flex-basis: 23%;
+
+    padding-left: 8px;
+    padding-right: 8px;
+}

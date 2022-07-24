@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/Decentralized-Global-Billboard/static/css/main.d2616e41.css",
+    "main.js": "/Decentralized-Global-Billboard/static/js/main.b3037e3c.js",
+    "static/media/main-header.jpg": "/Decentralized-Global-Billboard/static/media/main-header.45e7720ced750caaabfd.jpg",
+    "index.html": "/Decentralized-Global-Billboard/index.html",
+    "main.d2616e41.css.map": "/Decentralized-Global-Billboard/static/css/main.d2616e41.css.map",
+    "main.b3037e3c.js.map": "/Decentralized-Global-Billboard/static/js/main.b3037e3c.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d2616e41.css",
+    "static/js/main.b3037e3c.js"
+  ]
+}
