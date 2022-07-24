@@ -1,15 +1,13 @@
 import React, {useRef, useEffect, useState, Suspense} from "react";
 import AddGrid from "../AddGrid/AddGrid";
 import { subMinutes, isBefore, isEqual } from 'date-fns';
-import {Grid, WindowScroller, AutoSizer} from 'react-virtualized';
-import RenderIfVisible from 'react-render-if-visible'
 import AddModal from "../Modal/Modal";
 import './TimeLine.css';
 import { Modal } from "@mui/material";
 
 
 export default function TimeLine(props){
-    const {chosenDate, changeChosenDate} = props
+    const {chosenDate} = props
     const cards = []
     const chosenRef = useRef()
     //const [counter, setCounter] = useState(0)
