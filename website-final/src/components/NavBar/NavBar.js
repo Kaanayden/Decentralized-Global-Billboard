@@ -3,6 +3,7 @@ import {  Link } from "react-router-dom";
 import {ethers} from 'ethers'
 import './NavBar.css'
 import contractAbi from '../abi.json';
+import bigNumberToFloat from '../../scripts/bigNumberToFloat';
 
 
 const NavBar= (props) =>{
@@ -19,9 +20,7 @@ const NavBar= (props) =>{
 
                 contract.balanceOf( account )
                 .then( val => {
-                    const DECIMAL_NUMBER = 4;
-                    let decimals = ethers.BigNumber.from( 10 ).pow( ethers.BigNumber.from( 18 - DECIMAL_NUMBER ) );
-                    let floatValue = val.div( decimals ).toNumber() / 10 ** DECIMAL_NUMBER;
+                    let floatValue = bigNumberToFloat( val, 4 );
                     setBalance(floatValue );
                 } );
 
@@ -50,7 +49,7 @@ const NavBar= (props) =>{
             <Link to="/ReportBillboard">Report Billboard</Link>
         </li>
         <li className='balance'>
-            { contract && <div>Current Balance: {balance} BBRD</div>}
+            { contract && balance && <div>Current Balance: {balance} BBRD</div>}
         </li>
         <li className='connect-button'>
             <button onClick={connectWalletHandler}>{connButtonText}</button>

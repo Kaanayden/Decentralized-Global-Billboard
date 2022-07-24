@@ -5,13 +5,13 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-
+import bigNumberToFloat from '../../scripts/bigNumberToFloat';
 
 
 
 export default function BillboardCard( props ) {
 
-
+    const date = new Date(props.billboard.startTime * 1000);
     const goToWebsite = () => {
         window.open( props.domainName );
     }
@@ -34,14 +34,18 @@ export default function BillboardCard( props ) {
 } { props.billboard.isBanned && "(Banned)" }
   </Typography>
   <Typography variant="body2">
-    well meaning and kindly.
+    {"Since: " + date.toString() }
     <br />
-    {'"a benevolent smile"'}
+    {"Traffic Data: " +  props.billboard.rewardCoefficient }
+    <br />
+    {"Reward: " +  bigNumberToFloat( props.reward, 12 ) + " BBRD" }
   </Typography>
 </CardContent>
 <CardActions>
   <Button size="small" onClick = {goToWebsite} >Go to website</Button>
-  <Button size="small" onClick = { props.deactivate( props.domainName ) }>Deactivate</Button>
+  { props.billboard.ownerAddress.toLowerCase() == props.account.toLowerCase() && props.billboard.isActive &&  <Button size="small" onClick = { () => props.deactivateButton( props.domainName ) }>Deactivate</Button>}
+  {props.billboard.ownerAddress.toLowerCase() == props.account.toLowerCase() && !props.billboard.isActive &&  <Button size="small" onClick = { () => props.activateButton( props.domainName ) }>Activate</Button>}
+  { props.billboard.ownerAddress.toLowerCase() == props.account.toLowerCase() && props.billboard.isActive &&  <Button size="small" onClick = { () => props.withdraw( props.domainName ) }>Withdraw</Button>}
 </CardActions>
 </React.Fragment>
 
