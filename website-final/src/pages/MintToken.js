@@ -3,7 +3,7 @@ import {ethers} from 'ethers';
 //import contractAbi from './Navbar/abi';
 
 
-export default function ApiTest(props){
+export default function MintToken(props){
     const {contract} = props
     console.log( contract );
     
@@ -12,6 +12,7 @@ export default function ApiTest(props){
     const[trafficData, setTrafficData] = useState();
     const[checkData, setCheckData] = useState();
     const[reportText, setReportText] = useState();
+    const[mintResult, setMintResult] = useState();
 
 
     getContractValues();
@@ -91,30 +92,30 @@ export default function ApiTest(props){
         }
     }
 
+    const mintTokens = async () => {
+        try {
+            await contract.mockMintTokens();
+            setMintResult("Minting is successfull. 100 Billboard token will be transacted to your account.")
+        } catch (err) {
+            setMintResult("Already minted. Each address can mint only once.");
+        }
+    }
 
     return(
 		<div style={{position:"relative", top:"60px"}}>
-        { !contract && <h4> Please connect Metamask to get contract data and interact with contract. </h4> }
-        <h4> Current Traffic Fetcher API URL: {currentTrafficCheckerUrl}  </h4>
-        <h4> Current Billboard Checker API URL: {currentBillboardChecker} </h4>
-			<form onSubmit={ getTrafficData }>
-				<input id="setText" type="text"/>
-				<button type={"submit"}> Get Traffic Data and Check Advertisement Element </button>
-                <p>{trafficText}</p>
-			</form>
-            <form onSubmit={ getCheckData }>
-				<input id="setText" type="text"/>
-				<button type={"submit"}> Check Whether Advertisement Element Exists</button>
-                <p>{checkText}</p>
-			</form>
-            <form onSubmit={ reportBillboard }>
-				<input id="setText" type="text"/>
-				<button type={"submit"}> Report Billboard Shower </button>
-                <p>{reportText}</p>
-			</form>
-			<div>
-			<button onClick={handleClick} style={{marginTop: '5em'}}> Get Current Contract Value </button>
-			</div>
+        { !contract && 
+        <div>
+            <h4> Please connect Metamask to mint tokens. </h4> 
+        </div>
+        }
+        {contract && 
+        <div>
+            <button onClick={mintTokens} style={{marginTop: '5em'}}> Mint 100 BBRD </button>
+            <h4>{mintResult}</h4>
+        </div>
+
+        }
+
 		</div>
     )
     

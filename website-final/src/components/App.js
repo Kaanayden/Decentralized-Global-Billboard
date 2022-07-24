@@ -3,12 +3,12 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import NavBar from "./NavBar/NavBar";
 import BuyAd from "../pages/BuyAd";
 import AdShowers from "../pages/AdShowers";
-import ApiTest from "../pages/ApiTest";
 import Proposal from "../pages/Proposal";
 import ReportBillboard from "../pages/ReportBillboard";
 import {ethers} from 'ethers'
 import contractAbi from './abi'
 import './App.css';
+import MintToken from "../pages/MintToken";
 
 const contractAddress = '0x2Fb9CAaEc0aBEd9eBF9A2487aFEC5121a18A78b9';
 
@@ -46,6 +46,7 @@ export default function App() {
 	// update account, will cause component re-render
 	const accountChangedHandler = (newAccount) => {
 		setDefaultAccount(newAccount);
+		console.log(newAccount);
     const butText = newAccount.toString()
     setConnButtonText(butText);
 		updateEthers();
@@ -81,6 +82,8 @@ export default function App() {
         <NavBar 
           connectWalletHandler={connectWalletHandler}
           connButtonText={connButtonText}
+		  contract =  {contract}
+		  account = {defaultAccount}
         />
 		</div>
         <Switch >
@@ -90,8 +93,8 @@ export default function App() {
           <Route path="/AdShowers">
             <AdShowers contract={contract}/>
           </Route>
-          <Route path="/ApiTest">
-            <ApiTest contract={contract}/>
+          <Route path="/MintToken">
+            <MintToken contract={contract}/>
           </Route>
           <Route path="/Proposal">
             <Proposal contract={contract}/>
