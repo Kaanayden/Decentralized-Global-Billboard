@@ -17,7 +17,7 @@ export default function BuyAd(props){
             <div>
                 <DateTimePicker setDate={setDate}/>
             </div>
-            <div style={{position:"relative", top:"100px"}}><TimeLine chosenDate={chosenDate}/></div>
+            <div style={{position:"relative", top:"100px"}}><TimeLine chosenDate={chosenDate} contract = { contract }/></div>
         </div>
     )
 }

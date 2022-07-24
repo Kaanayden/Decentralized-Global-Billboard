@@ -7,7 +7,7 @@ import { Modal } from "@mui/material";
 
 
 export default function TimeLine(props){
-    const {chosenDate} = props
+    const {chosenDate,contract} = props
     const cards = []
     const chosenRef = useRef()
     //const [counter, setCounter] = useState(0)
@@ -21,12 +21,17 @@ export default function TimeLine(props){
           if(isEqual(start,chosenDate)){
             row.push(<div ref={chosenRef} className="cards-item"><AddGrid
               isColor={0}
-              chosenDate={start}/>
+              chosenDate={start}
+              contract = { contract }
+              />
+              
               </div>)
           }
           else row.push(<div className="cards-item"><AddGrid 
               isColor={isBefore(start,chosenDate)?1:2}
-              chosenDate={start}/>
+              chosenDate={start}
+              contract = { contract }
+              />
               </div>)
             start = subMinutes(start,-1)
         }

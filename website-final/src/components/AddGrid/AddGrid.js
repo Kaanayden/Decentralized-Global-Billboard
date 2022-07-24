@@ -10,19 +10,39 @@ let isValid = (date)=>{
   return false;
 }
 
-function BasicExample({chosenDate,isColor}) {
+function convertToUTCUnix( date ) {
+  return date.getTime() / 1000 - date.getTimezoneOffset() * 60;
+}
+
+function isValidNew( date ) {
+  let unix = convertToUTCUnix( date );
+  let timeNow = new Date()
+  let nowUnix = timeNow.getTime() / 1000;
+  if( unix > nowUnix ) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function BasicExample(props) {
   let colors = ['primary','secondary','success']
 
+
+
   return (
+    <div >
       <Card bg={"primary"} style={{ width: '20rem'}}>
         <Card.Img style={{ width: '100%'}} variant="top" src={MainHeader} />
         <Card.Body>
           <Card.Text>
-            {chosenDate.toString()}
+            {props.chosenDate.getHours().toString() + ":" + props.chosenDate.getMinutes().toString()}
           </Card.Text>
-          <AddModal addDate={chosenDate} isValid={isValid(chosenDate)}/>
+          {isValidNew( props.chosenDate ) &&
+            <AddModal addDate={props.chosenDate} contract = {props.contract}/>}
         </Card.Body>
       </Card>
+      </div>
   );
 }
 

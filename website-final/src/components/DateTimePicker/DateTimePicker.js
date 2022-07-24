@@ -12,10 +12,10 @@ function convertToUTC( date ) {
 
 export default function DateTimePicker(props){
     const {setDate} = props;
-
+    
     const [chosenDate, setNewDate] = useState( new Date() )
     const [chosenTime, setNewTime] = useState( new Date() )
-
+    chosenDate.setSeconds(0);
     const handleClickDate = (chosenDate)=>{
         setNewDate(chosenDate)
     }
@@ -23,6 +23,7 @@ export default function DateTimePicker(props){
     const handleClickTime = (chosenTime)=>{
         chosenDate.setHours(chosenTime.getHours());
         chosenDate.setMinutes(chosenTime.getMinutes());
+        chosenDate.setSeconds(0);
         setNewDate(convertToUTC(chosenDate))
     }
 
