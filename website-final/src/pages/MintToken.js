@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {ethers} from 'ethers';
+import './styles.css';
 //import contractAbi from './Navbar/abi';
 
 
@@ -12,7 +13,7 @@ export default function MintToken(props){
     const[trafficData, setTrafficData] = useState();
     const[checkData, setCheckData] = useState();
     const[reportText, setReportText] = useState();
-    const[mintResult, setMintResult] = useState();
+    const[mintResult, setMintResult] = useState("Mint 100BBRD");
 
 
     getContractValues();
@@ -109,9 +110,8 @@ export default function MintToken(props){
         </div>
         }
         {contract && 
-        <div>
-            <button onClick={mintTokens} style={{marginTop: '5em'}}> Mint 100 BBRD </button>
-            <h4>{mintResult}</h4>
+        <div style={{position:'relative', top:"100px", left:"500px"}}>
+            <button className="button-64" onClick={mintTokens}> <span class="text">{mintResult}</span> </button>
         </div>
 
         }
