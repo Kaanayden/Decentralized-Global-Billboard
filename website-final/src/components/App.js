@@ -77,11 +77,13 @@ export default function App() {
   return (
     <Router>
       <div>
+		<div>
         <NavBar 
           connectWalletHandler={connectWalletHandler}
           connButtonText={connButtonText}
         />
-        <Switch>
+		</div>
+        <Switch >
           <Route exact path="/">
             <BuyAd contract={contract}/>
           </Route>
