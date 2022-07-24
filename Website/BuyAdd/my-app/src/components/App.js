@@ -7,6 +7,7 @@ import TimeLine from './TimeLine/TimeLine';
 import NavBar from './NavBar/NavBar';
 import {ethers} from 'ethers'
 import contractAbi from './abi'
+import Covalent from './CovalentJson/Covalent';
 
 const contractAddress = '0x2Fb9CAaEc0aBEd9eBF9A2487aFEC5121a18A78b9';
 
@@ -124,12 +125,7 @@ const App = ()=>{
                 />
             </div>
             <div className='main'>
-                <TimeLine
-                    changeChosenDate={changeChosenDate}
-                    chosenDate={dateAdd( chosenDate,{
-                        minutes: chosenDate.getTimezoneOffset()
-                        } )} 
-                />    
+                <Covalent contractProp={contract}/>  
             </div>    
             <div>
                 
