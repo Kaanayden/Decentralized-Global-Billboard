@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -17,14 +18,14 @@ const style = {
 };
 
 export default function AddModal(props) {
-    const {addDate} = props  
+    const {addDate,isValid} = props  
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
     return (
         <div>
-        <Button onClick={handleOpen}>Buy</Button>
+        {isValid && <Button onClick={handleOpen}>Buy</Button>}
         <Modal
             open={open}
             onClose={handleClose}
@@ -33,6 +34,7 @@ export default function AddModal(props) {
         >
             <Box sx={style}>
                 <div>{addDate.toString()}</div>
+                <div>{isValid.toString()}</div>
             </Box>
         </Modal>
         </div>

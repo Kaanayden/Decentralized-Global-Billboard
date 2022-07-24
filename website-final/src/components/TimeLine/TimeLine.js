@@ -1,7 +1,7 @@
 import React, {useRef, useEffect, useState, Suspense} from "react";
 import AddGrid from "../AddGrid/AddGrid";
 import { subMinutes, isBefore, isEqual } from 'date-fns';
-import AddModal from "../Modal/Modal";
+
 import './TimeLine.css';
 import { Modal } from "@mui/material";
 
@@ -19,14 +19,14 @@ export default function TimeLine(props){
         const row = []
         for(var k = 0; k < 4; k++){
           if(isEqual(start,chosenDate)){
-            row.push(<div ref={chosenRef} className="cards-item"><AddGrid 
+            row.push(<div ref={chosenRef} className="cards-item"><AddGrid
+              isColor={0}
               chosenDate={start}/>
-              <AddModal addDate={start}/>
               </div>)
           }
           else row.push(<div className="cards-item"><AddGrid 
+              isColor={isBefore(start,chosenDate)?1:2}
               chosenDate={start}/>
-              <AddModal addDate={start}/>
               </div>)
             start = subMinutes(start,-1)
         }
