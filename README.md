@@ -23,6 +23,6 @@ Billboard Report page:
       In this page user can test API's which are registered in the contract and report if any registered domain do not show advertisement and get reward.
      
 
-IPFS & Filecoin used in Modal.js
+IPFS & Filecoin used in website-final/src/components/Modal/Modal.js
 
-Covalent used in Billboard.js
+Covalent used in website-final/src/components/UploadAdIPFS/AdUpload/AdUpload.js
