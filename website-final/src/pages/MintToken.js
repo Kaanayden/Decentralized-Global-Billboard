@@ -95,7 +95,7 @@ export default function MintToken(props){
     const mintTokens = async () => {
         try {
             await contract.mockMintTokens();
-            setMintResult("Minting is successfull. 100 Billboard token will be transacted to your account.")
+            setMintResult("Minting is successful. 100 Billboard token will be transacted to your account.")
         } catch (err) {
             setMintResult("Already minted. Each address can mint only once.");
         }

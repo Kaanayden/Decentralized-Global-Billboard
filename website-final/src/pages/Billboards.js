@@ -6,7 +6,13 @@ export default function Billboards(props){
     const {contract, account} = props
     const [elements, setElements] = useState([]);
     
-
+    const deactivate = async ( domainName ) => {
+        try {
+        await contract.deactivateBillboardShower( domainName );
+        } catch( err ) {
+            
+        }
+    }
 
     async function getBillboards() {
         const data = await covalent();
@@ -15,7 +21,7 @@ export default function Billboards(props){
         for( const anEvent of events ) {
             let domainName = anEvent.domainName;
             const newBillboard = await contract.billboardShowers( domainName );
-            const newElement = <BillboardCard key = {newBillboard} domainName = { domainName } billboard = {newBillboard} account = {account}/>
+            const newElement = <BillboardCard key = {newBillboard} domainName = { domainName } billboard = {newBillboard} account = {account} deactivate = {deactivate}/>
             newList.push( newElement );
             
         }

@@ -11,6 +11,11 @@ import Typography from '@mui/material/Typography';
 
 export default function BillboardCard( props ) {
 
+
+    const goToWebsite = () => {
+        window.open( props.domainName );
+    }
+
   return (
     <Box sx={{ minWidth: 275 }}>
       <Card variant="outlined">{
@@ -35,8 +40,8 @@ export default function BillboardCard( props ) {
   </Typography>
 </CardContent>
 <CardActions>
-  <Button size="small">Go to website</Button>
-  <Button size="small">Deactivate</Button>
+  <Button size="small" onClick = {goToWebsite} >Go to website</Button>
+  <Button size="small" onClick = { props.deactivate( props.domainName ) }>Deactivate</Button>
 </CardActions>
 </React.Fragment>
 
