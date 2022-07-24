@@ -38,7 +38,7 @@ const NavBar= (props) =>{
             <Link to="/">Buy Ad</Link>
         </li>
         <li>
-            <Link to="/AdShowers">Billboards</Link>
+            <Link to="/Billboards">Billboards</Link>
         </li>
         <li>
             <Link to="/MintToken">Mint Tokens</Link>

@@ -2,7 +2,7 @@ import React,{useState} from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import NavBar from "./NavBar/NavBar";
 import BuyAd from "../pages/BuyAd";
-import AdShowers from "../pages/AdShowers";
+import Billboards from "../pages/Billboards";
 import Proposal from "../pages/Proposal";
 import ReportBillboard from "../pages/ReportBillboard";
 import {ethers} from 'ethers'
@@ -90,8 +90,8 @@ export default function App() {
           <Route exact path="/">
             <BuyAd contract={contract}/>
           </Route>
-          <Route path="/AdShowers">
-            <AdShowers contract={contract}/>
+          <Route path="/Billboards">
+            <Billboards contract={contract} account = {defaultAccount}/>
           </Route>
           <Route path="/MintToken">
             <MintToken contract={contract}/>
