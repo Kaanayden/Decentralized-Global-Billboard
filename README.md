@@ -52,9 +52,10 @@ withdrawReward( domainName): Owner withdraws reward of domain name which display
 
 
 IPFS & Web3.storage used in 
-website-final/src/components/Modal/Modal.js
+https://github.com/Kaanayden/Decentralized-Global-Billboard/blob/main/website-final/src/components/Modal/Modal.js
 
 Covalent used in 
-website-final/src/pages/Billboards.js
+https://github.com/Kaanayden/Decentralized-Global-Billboard/blob/main/website-final/src/pages/Billboards.js
+
 https://github.com/Kaanayden/Decentralized-Global-Billboard/blob/main/website-final/src/scripts/Covalent.js
 
