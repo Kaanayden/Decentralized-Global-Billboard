@@ -7,6 +7,7 @@ ul {
 	position: fixed;
  	top: 0;
   	width: 100%;
+	z-index: 100;
 }
   
 li {
@@ -40,4 +41,15 @@ li a:hover {
 }
 .connect-button button:hover{
 	background-color: #111;
+}
+.balance{
+	position: inherit;
+	float: right;
+	background-color: #333;
+	color: white;
+	border: transparent;
+	text-decoration: none;
+	text-align: center;
+	padding: 14px 16px;
+	display: inline-flex;
 }

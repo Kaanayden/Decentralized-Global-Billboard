@@ -1,9 +1,27 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {  Link } from "react-router-dom";
+import {ethers} from 'ethers'
 import './NavBar.css'
+import contractAbi from '../abi.json';
+
 
 const NavBar= (props) =>{
-    const {connButtonText,connectWalletHandler} = props
+    const {connButtonText,connectWalletHandler,contract,account} = props
+    const [balance, setBalance] = useState()
+
+    const getCurrentBalance = async () => {
+        let val = await contract.balanceOf( account );
+        return val;
+    }
+
+    useEffect(()=>{
+        setInterval( async()=>{
+            let val = await contract.balanceOf( account );
+            setBalance(val)
+        },10000)
+        console.log("selam")
+    },[connButtonText])
+    
 
     return (
     <ul className='nav-bar'>
@@ -21,6 +39,9 @@ const NavBar= (props) =>{
         </li>
         <li>
             <Link to="/ReportBillboard">ReportbillBoard</Link>
+        </li>
+        <li className='balance'>
+            <div>Current Balance:</div>
         </li>
         <li className='connect-button'>
             <button onClick={connectWalletHandler}>{connButtonText}</button>
