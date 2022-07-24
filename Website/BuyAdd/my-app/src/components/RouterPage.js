@@ -7,6 +7,7 @@ import {
 import App from './App';
 import AdUpload from './AdUpload/AdUpload';
 import MetamaskTest from './MetaMaskTest/MetaMaskTest';
+import Covalent from './CovalentJson/Covalent';
  
 class RouterPage extends Component {
   render() {
@@ -22,6 +23,9 @@ class RouterPage extends Component {
           </Route>
           <Route path="/metamask">
             <MetamaskTest/>
+          </Route>
+          <Route path="/covalent">
+            <Covalent/>
           </Route>
         </Switch>
       </div>

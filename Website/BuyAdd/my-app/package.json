@@ -25,7 +25,9 @@
     "react-sticky": "^6.0.3",
     "react-virtualized": "^9.22.3",
     "react-visibility-sensor": "^5.1.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "web3": "^1.7.4",
+    "web3.storage": "^4.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
